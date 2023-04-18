@@ -1,0 +1,34 @@
+import sqlite3
+
+# Nos conectamos a la base de datos
+conexion = sqlite3.connect("base_prueba.db")
+
+# Creamos 
+conexion.execute("""create table if not exists Obrero(
+                    id integer primary key AUTOINCREMENT,
+                    nombre varchar,
+                    edad integer
+                    )""")
+conexion.close()
+conexion = sqlite3.connect("base_prueba.db")
+
+# Insertamos Diesiceis Obreros de Alianza
+conexion.execute("Insert into Obrero (nombre, edad, trabajo)  values(?,?,?)", ("MARCO", 45, "Ollero"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("MOISES",34, "Bomba"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("MEMO", 34, "Ollero"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("FERNANDO", 32, "Bomba"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("GABIERL", 27,"Ollero"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("JIMENES", 56,"Ollero"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("PEDRO", 24,"Bomba"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("LUIS", 45,"Ollero"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("ARON", 19,"Ollero"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("ELIAS", 43,"Ollero"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("GABRIEL", 37,"Bomba"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("JOEL", 46,"Ollero"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("ANTONIO", 22,"Bomba"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("MANUEL ", 32,"Bomba"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("URIEL ", 27,"Ollero"))
+conexion.execute("Insert into Obrero (nombre, edad, trabajo) values(?,?,?)", ("GERMAN ", 26,"Bomba"))
+
+# Este es necesario para que se ejecuten consultas anteriores
+conexion.commit()
