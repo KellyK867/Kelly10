@@ -1,14 +1,40 @@
 #Examen_U2_Poo
 import tkinter as tk
+from tkinter import *
+from tkinter import colorchooser as colorchooser 
 
 def iniciar_sesion():
     usuario = nombre_usuario.get()
     contrasena = contrasena_usuario.get()
     if usuario == "ADMI" and contrasena == "0123":
         resultado.config(text="Iniciaste Sesion Correctamente")
+        poot=tk.Tk()
+        poot.title("TRABAJADORES") 
+        poot.geometry("500x500")
+        poot.config(bg="light blue")
+
+
+        poot.mainloop()
+
     else:
         resultado.config(text="Nombre de usuario o contraseña incorrectos")
 
+def iniciar_sesion2():
+    usuario = nombre.get()
+    contrasena = folio.get()
+    if usuario == "TRABA" and contrasena == "0123":
+        
+        poot=tk.Tk()
+        poot.title("Tus Horarios") 
+        poot.geometry("500x500")
+        poot.config(bg="Black")
+        resultado = tk.Label(poot, text="Horario",bg="black",fg="white")
+        resultado.pack(pady=70)
+
+        poot.mainloop()
+    else:
+        resultado.config(text="Nombre de usuario o contraseña incorrectos")
+        
 #Define el tamaño y el color de la ventana 
 ventana = tk.Tk()
 ventana.title("INICIA SESION_ADMINISTRADOR")
@@ -28,13 +54,9 @@ Exit = tk.Button(ventana, text="SALIR", command=ventana.quit, bg="Fuchsia")
 Exit.pack()
 
 # Crear un widget de etiqueta para mostrar el resultado del inicio de sesión
-resultado = tk.Label(ventana, text="")
+resultado = tk.Label(ventana, text="", bg="Pink")
 resultado.pack(pady=70)
 ventana.mainloop()
-
-
-from tkinter import *
-from tkinter import colorchooser as colorchooser 
 
 root=Tk()
 root.title("Iniciar sesion_Trabajador") 
@@ -46,18 +68,10 @@ nombre.pack(pady=40)
 folio = tk.Entry(root, show="*")
 folio.pack()
 
-iniciar = tk.Button(root, text="ENTAR", command=iniciar_sesion, bg="green")
+iniciar = tk.Button(root, text="ENTAR", command=iniciar_sesion2, bg="green")
 iniciar.pack(padx=40, pady=40)
 Exit = tk.Button(root, text="CERRAR", command=root.quit, bg="green")
 Exit.pack()
-
-poot=Tk()
-poot.title("Tus Horarios") 
-poot.geometry("500x500")
-poot.config(bg="Black")
-iniciar_sesion=poot.title
-resultado = tk.Label(poot, text="Horario")
+resultado = tk.Label(text="",bg="teal")
 resultado.pack(pady=70)
-
 root.mainloop()
-poot.mainloop()
