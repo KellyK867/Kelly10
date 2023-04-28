@@ -1,40 +1,51 @@
-#Examen_U2_Poo
+import tkinter as tk
+from tkinter import ttk
 import tkinter as tk
 from tkinter import *
 from tkinter import colorchooser as colorchooser 
 
+
 def iniciar_sesion():
+
     usuario = nombre_usuario.get()
     contrasena = contrasena_usuario.get()
+
     if usuario == "ADMI" and contrasena == "0123":
+        def llamar():
+            cuantos=int(input("Ingrese el numero de trabajadores que van a ser registrados: "))
+            print("")
+            for x in range(cuantos):
+            
+                nombres1=input("Favor de ingresar los nombres: ")
+                apellidos2=input("Favor de ingresar los Apellidos: ")
+                folio3=input("Favor de ingresar su numero de folio: ")
+                oficio4=input("Favor de ingresar su oficio: ")
+                edad5=input("Favor de ingresar edad: ")
+                    
+                from CLASE_EMPLEADO import Empleados
+                CLASE=Empleados(nombres=nombres1,apellidos=apellidos2,folio=folio3,oficio=oficio4,edad=edad5)
+                CLASE.mostrarempleado()
+                print(" ")
+
+            
         resultado.config(text="Iniciaste Sesion Correctamente")
+        
+
+
         poot=tk.Tk()
-        poot.title("TRABAJADORES") 
+        poot.title("LISTA DE TRABAJADORES")
         poot.geometry("500x500")
         poot.config(bg="light blue")
-
-
-        poot.mainloop()
+        tecto=tk.Label(poot,text="BIENVENID@")
+        tecto.pack()
+        bot=tk.Button(poot,bg="cyan",text="INGRESAR TRABAJADOR(ES)",command=llamar)
+        bot.pack()
+        
 
     else:
         resultado.config(text="Nombre de usuario o contraseña incorrectos")
 
-def iniciar_sesion2():
-    usuario = nombre.get()
-    contrasena = folio.get()
-    if usuario == "TRABA" and contrasena == "0123":
-        
-        poot=tk.Tk()
-        poot.title("Tus Horarios") 
-        poot.geometry("500x500")
-        poot.config(bg="Black")
-        resultado = tk.Label(poot, text="Horario",bg="black",fg="white")
-        resultado.pack(pady=70)
 
-        poot.mainloop()
-    else:
-        resultado.config(text="Nombre de usuario o contraseña incorrectos")
-        
 #Define el tamaño y el color de la ventana 
 ventana = tk.Tk()
 ventana.title("INICIA SESION_ADMINISTRADOR")
@@ -58,20 +69,96 @@ resultado = tk.Label(ventana, text="", bg="Pink")
 resultado.pack(pady=70)
 ventana.mainloop()
 
-root=Tk()
-root.title("Iniciar sesion_Trabajador") 
-root.geometry("500x500")
-root.config(bg="teal")
+#TRABAJADOR
 
-nombre = tk.Entry(root)
-nombre.pack(pady=40)
-folio = tk.Entry(root, show="*")
-folio.pack()
+usuarios = {'GUILLERMO': '123', 'ANGEL': '123', 'EDUARDO Creed': '123'}
 
-iniciar = tk.Button(root, text="ENTAR", command=iniciar_sesion2, bg="green")
-iniciar.pack(padx=40, pady=40)
-Exit = tk.Button(root, text="CERRAR", command=root.quit, bg="green")
-Exit.pack()
-resultado = tk.Label(text="",bg="teal")
-resultado.pack(pady=70)
-root.mainloop()
+# Horarios preterminados
+horarios = {'GUILLERMO': {'Lunes': ['8:00', '9:30', '11:00'], 
+                         'Martes': ['9:00', '10:30', '12:00'],
+                         'Miercoles': ['10:00', '11:30', '1:00'],
+                         'Jueves': ['11:00', '12:30', '2:00'],
+                         'Viernes': ['12:00', '1:30', '3:00']}, 
+            'ANGEL': {'Lunes': ['9:00', '10:30', '12:00'], 
+                         'Martes': ['10:00', '11:30', '1:00'],
+                         'Miercoles': ['11:00', '12:30', '2:00'],
+                         'Jueves': ['12:00', '1:30', '3:00'],
+                         'Viernes': ['1:00', '2:30', '4:00']},
+            'EDUARDO Creed': {'Lunes': ['10:00', '11:30', '1:00'], 
+                         'Martes': ['11:00', '12:30', '2:00'],
+                         'Miercoles': ['12:00', '1:30', '3:00'],
+                         'Jueves': ['1:00', '2:30', '4:00'],
+                         'Viernes': ['2:00', '3:30', '5:00']}}
+
+# Función para crear la ventana de inicio de sesión
+def ventana_inicio():
+
+    # Crear la ventana
+    ventana = tk.Tk()
+    ventana.title("INICIO DE SESION DE TRABAJADOR")
+    ventana.geometry("500x500")
+    ventana.config(bg="light blue")
+    resultado = tk.Label(ventana, text="BIENVENIDO")
+    resultado.pack(pady=70)
+
+    # Crear los campos de usuario y contraseña
+    etiqueta_usuario = ttk.Label(ventana, text="Usuario:")
+    etiqueta_usuario.pack(pady=20)
+    campo_usuario = ttk.Entry(ventana)
+    campo_usuario.pack()
+
+    etiqueta_contraseña = ttk.Label(ventana, text="Contraseña:")
+    etiqueta_contraseña.pack(pady=20)
+    campo_contraseña = ttk.Entry(ventana, show="*")
+    campo_contraseña.pack()
+
+    def iniciar_sesion():
+        usuario = campo_usuario.get()
+        contraseña = campo_contraseña.get()
+
+        if usuario in usuarios and usuarios[usuario] == contraseña:
+            print("Inicio de sesión exitoso")
+
+            # Cerrar la ventana de inicio de sesión y mostrar la ventana de horarios
+            ventana.destroy()
+            ventana_horarios(usuario)
+        else:
+            print("Usuario o ontraseña incorrecta")
+
+
+    # Crear el botón de inicio de sesión
+    boton_inicio = ttk.Button(ventana, text="Iniciar sesión", command=iniciar_sesion)
+    boton_inicio.pack(pady=30)
+
+
+    # Iniciar el bucle principal de la interfaz
+    ventana.mainloop()
+
+# Función para crear la ventana de horarios
+def ventana_horarios(usuario):
+    # Obtener los horarios del usuario actual
+    horario = horarios[usuario]
+
+    # Crear la ventana
+    ventana = tk.Tk()
+    ventana.title("HORARIO DE " + usuario)
+    
+    # Crear la tabla
+    tabla = ttk.Treeview(ventana, columns=("dia", "primerviaje", "segundoviaje", "tercerviaje"), show="headings")
+    tabla.heading("dia", text="Día")
+    tabla.heading("primerviaje", text="Primer Viaje")
+    tabla.heading("segundoviaje", text="Segundo Viaje")
+    tabla.heading("tercerviaje", text="Tercer Viaje")
+    for dia, horas in horario.items():
+        fila = (dia,) + tuple(horas)
+        tabla.insert("", "end", values=fila)
+
+    # Mostrar la tabla
+    tabla.pack()
+
+    # Iniciar el bucle principal de la interfaz
+    ventana.mainloop()
+
+
+# Llamar a la función para mostrar la ventana de inicio de sesión
+ventana_inicio()
