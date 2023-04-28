@@ -1,0 +1,11 @@
+#ESTA CLASE ES PARTE DEL EXAMEN U2 YA QUE LO LLAMA PARA EL REGISTRO DE EMPLEADOS, EL CUAL REGISTRA SUS DATOS, ES IMPORTANTE LLAMARLO COMO CLASE_EMPLEADO PARA QUE LO LEA, EN MAYUSCULA TODO
+class Empleados:
+    def _init_(self,nombres,apellidos,folio,oficio,edad):
+      self.nombres=nombres
+      self.apellidos=apellidos
+      self.folio=folio
+      self.oficio=oficio
+      self.edad=edad
+
+    def mostrarempleado(self):
+      print ("\nNombres: " +self.nombres+"\nApellidos: "+self.apellidos+"\nFolio: "+self.folio+"\nOficio: "+self.oficio+"\nEdad:  "+str(self.edad))
