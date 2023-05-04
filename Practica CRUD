@@ -1,0 +1,221 @@
+from tkinter import *
+from tkinter import messagebox
+import mysql.connector
+
+# Conectar a la base de datos
+try:
+    db = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        password="",
+        database="alianza"
+    )
+except mysql.connector.Error as e:
+    messagebox.showerror("Error de conexión", f"No se pudo conectar a la base de datos: {e}")
+    exit()
+
+
+# Crear la tabla de trabajadores si no existe
+cursor = db.cursor()
+cursor.execute("CREATE TABLE IF NOT EXISTS trabajador (id INT AUTO_INCREMENT PRIMARY KEY, nombre VARCHAR(255), edad INT, correo VARCHAR(255), folio INT(11), oficio VARCHAR(255))")
+
+# Función para leer  los trabajadores de la base de datos
+def leer_trabajadorDB():
+    cursor = db.cursor()
+    cursor.execute("SELECT * FROM trabajador")
+    return cursor.fetchall()
+
+# Función para agregar un nuevo trabajador a la base de datos
+def agregar_trabajadorDB(nombre, edad, correo, folio, oficio):
+    try:
+        cursor = db.cursor()
+        cursor.execute("INSERT INTO trabajador (nombre, edad, correo, folio, oficio ) VALUES (%s, %s, %s, %s, %s)", (nombre, edad, correo, folio, oficio))
+        db.commit()
+    except mysql.connector.Error as error:
+        messagebox.showerror("Error al agregar el trabajador", f"No se pudo agregar el trabajador: {error}")
+    finally:
+        cursor.close()
+
+
+# Función para actualizar un trabajador existente en la base de datos
+def actualizar_trabajadorDB(id, nombre, edad, correo, folio, oficio):
+    iid = int(id)
+    cursor = db.cursor()
+    cursor.execute("UPDATE `trabajador` SET `id`=%s,`nombre`=%s,`edad`=%s,`correo`=%s,`folio`=%s,`oficio`=%s WHERE id=%s", (iid, nombre, edad, correo, folio, oficio, iid))
+    db.commit()
+
+# Función para eliminar un alumno existente de la base de datos
+def eliminar_trabajadorDB(id):
+    cursor = db.cursor()
+    cursor.execute("DELETE FROM trabajador WHERE id = %s", (id,))
+    db.commit()
+
+# Función para mostrar una lista de todos los alumnos
+def mostrar_trabajador():
+    # Limpiar la tabla
+    for widget in tabla_trabajador.winfo_children():
+        widget.destroy()
+
+    # Obtener todos los alumnos
+    trabajador = leer_trabajadorDB()
+
+    # Mostrar los alumnos en la tabla
+    for i, trabajador in enumerate(trabajador):
+        id = trabajador[0]
+        nombre = trabajador[1]
+        edad = trabajador[2]
+        correo = trabajador[3]
+        folio = trabajador[4]
+        oficio = trabajador[5]
+
+        Label(tabla_trabajador, text=id).grid(row=i, column=0)
+        Label(tabla_trabajador, text=nombre).grid(row=i, column=1)
+        Label(tabla_trabajador, text=edad).grid(row=i, column=2)
+        Label(tabla_trabajador, text=correo).grid(row=i, column=3)
+        Label(tabla_trabajador, text=folio).grid(row=i, column=4)
+        Label(tabla_trabajador, text=oficio).grid(row=i, column=5)
+
+# Función para agregar un nuevo alumno
+def agregar_trabajador():
+    # Obtener los datos del nuevo alumno
+    nombre = entrada_nombre.get()
+    edad = entrada_edad.get()
+    correo = entrada_correo.get()
+    folio = entrada_folio.get()
+    oficio = entrada_oficio.get()
+
+    # Validar que los campos no estén vacíos
+    if not nombre or not edad or not correo or not folio or not oficio:
+        messagebox.showerror("Error al agregar el trabajador", "Por favor ingrese todos los datos del trabajador")
+        return
+
+    # Agregar el nuevo alumno
+    agregar_trabajadorDB(nombre, edad, correo, folio, oficio)
+
+    # Limpiar los campos de entrada
+    entrada_nombre.delete(0, END)
+    entrada_edad.delete(0, END)
+    entrada_correo.delete(0, END)
+    entrada_folio.delete(0,END)
+    entrada_oficio.delete(0,END)
+
+    # Mostrar la lista actualizada de alumnos
+    mostrar_trabajador()
+
+# Función para actualizar un alumno existente
+def actualizar_trabajador():
+    # Obtener los datos del alumno a actualizar
+    nombre = entrada_nombre.get()
+    edad = entrada_edad.get()
+    correo = entrada_correo.get()
+    folio = entrada_folio.get()
+    oficio = entrada_oficio.get()
+    id = entrada_id.get()
+    
+    # Validar que los campos no estén vacíos
+    if not id or not nombre or not edad or not correo or not folio or not oficio:
+        messagebox.showerror("Error al actualizar al trabajador", "Por favor ingrese todos los datos del trabajador")
+        return
+
+    # Actualizar el alumno
+    actualizar_trabajadorDB(id=id,nombre=nombre,edad=edad,correo=correo,folio=folio,oficio=oficio)
+
+    # Limpiar los campos de entrada
+    entrada_id.delete(0, END)
+    entrada_nombre.delete(0, END)
+    entrada_edad.delete(0, END)
+    entrada_correo.delete(0, END)
+    entrada_folio.delete(0, END)
+    entrada_oficio.delete(0, END)
+    
+    # Mostrar la lista actualizada de alumnos
+    mostrar_trabajador()
+
+
+# Función para eliminar un alumno existente
+def eliminar_trabajador():
+    # Obtener el ID del alumno a eliminar
+    id = entrada_id.get()
+
+    # Validar que se haya ingresado un ID
+    if not id:
+        messagebox.showerror("Error al eliminar el trabajador", "Por favor ingrese el ID del trabajdor")
+        return
+
+    # Preguntar al usuario si está seguro de eliminar el alumno
+    confirmar = messagebox.askyesno("Confirmar eliminación", "¿Está seguro de eliminar este Trabajador?")
+
+    if confirmar:
+        # Eliminar el alumno
+        eliminar_trabajadorDB(id)
+
+        # Limpiar los campos de entrada
+        entrada_id.delete(0, END)
+        entrada_nombre.delete(0, END)
+        entrada_edad.delete(0, END)
+        entrada_correo.delete(0, END)
+        entrada_folio.delete(0,END)
+        entrada_oficio.delete(0,END)
+
+        # Mostrar la lista actualizada de alumnos
+        mostrar_trabajador()
+
+
+# Crear la ventana principal
+ventana = Tk()
+ventana.title("LISTA DE TRABAJADORES")
+
+# Crear los campos de entrada para los datos del alumno
+Label(ventana, text="Id:").grid(row=0, column=0, padx=5, pady=5)
+entrada_id = Entry(ventana)
+entrada_id.grid(row=0, column=1, padx=5, pady=5)
+entrada_id.configure(bg="Pink")
+
+Label(ventana, text="Nombre:").grid(row=1, column=0, padx=5, pady=5)
+entrada_nombre = Entry(ventana)
+entrada_nombre.grid(row=1, column=1, padx=5, pady=5)
+entrada_nombre.configure(bg="Pink")
+
+Label(ventana, text="Edad:").grid(row=2, column=0, padx=5, pady=5)
+entrada_edad = Entry(ventana)
+entrada_edad.grid(row=2, column=1, padx=5, pady=5)
+entrada_edad.configure(bg="Pink")
+
+Label(ventana, text="Correo:").grid(row=3, column=0, padx=5, pady=5)
+entrada_correo = Entry(ventana)
+entrada_correo.grid(row=3, column=1, padx=5, pady=5)
+entrada_correo.configure(bg="Pink")
+
+Label(ventana, text="Folio:").grid(row=4, column=0, padx=5, pady=5)
+entrada_folio = Entry(ventana)
+entrada_folio.grid(row=4, column=1, padx=5, pady=5)
+entrada_folio.configure(bg="Pink")
+
+Label(ventana, text="Oficio:").grid(row=5, column=0, padx=5, pady=5)
+entrada_oficio = Entry(ventana)
+entrada_oficio.grid(row=5, column=1, padx=5, pady=5)
+entrada_oficio.configure(bg="Pink")
+
+
+# Crear los botones para agregar, actualizar y eliminar alumnos
+Button(ventana, text="Agregar trabajador", command=agregar_trabajador, bg="coral").grid(row=0, column=2, padx=5, pady=5)
+Button(ventana, text="Actualizar trabajador", command=actualizar_trabajador, bg="coral").grid(row=1, column=2, padx=5, pady=5)
+Button(ventana, text="Eliminar trabajador", command=eliminar_trabajador, bg="coral").grid(row=2, column=2, padx=5, pady=5)
+
+# Crear la tabla para mostrar los alumnos
+tabla_trabajador = Frame(ventana)
+tabla_trabajador.grid(row=6, column=0, columnspan=3, padx=5, pady=5)
+
+
+Label(tabla_trabajador, text="ID").grid(row=0, column=0)
+Label(tabla_trabajador, text="Nombre").grid(row=0, column=1)
+Label(tabla_trabajador, text="Edad").grid(row=0, column=2)
+Label(tabla_trabajador, text="Correo").grid(row=0, column=3)
+Label(tabla_trabajador, text="Folio").grid(row=0, column=4)
+Label(tabla_trabajador, text="Oficio").grid(row=0, column=5)
+
+# Mostrar la lista de alumnos en la tabla
+mostrar_trabajador()
+
+# Iniciar el loop de la ventana
+ventana.mainloop()
