@@ -1,6 +1,8 @@
 from tkinter import *
 from tkinter import messagebox
 import mysql.connector
+from tkinter import colorchooser as colorchooser 
+import tkinter as tk
 
 # Conectar a la base de datos
 try:
@@ -161,61 +163,102 @@ def eliminar_trabajador():
         mostrar_trabajador()
 
 
-# Crear la ventana principal
-ventana = Tk()
-ventana.title("LISTA DE TRABAJADORES")
+def iniciar_sesion():
+    usuario = nombre_usuario.get()
+    contrasena = contrasena_usuario.get()
+    if usuario == "ADMINISTRADOR" and contrasena == "10":
+        resultado.config(text="Iniciaste Sesion Correctamente")
+        global entrada_correo
+        global entrada_edad
+        global entrada_folio
+        global entrada_id
+        global entrada_nombre
+        global entrada_oficio
+        global tabla_trabajador
 
-# Crear los campos de entrada para los datos del alumno
-Label(ventana, text="Id:").grid(row=0, column=0, padx=5, pady=5)
-entrada_id = Entry(ventana)
-entrada_id.grid(row=0, column=1, padx=5, pady=5)
-entrada_id.configure(bg="Pink")
+        ventana = Tk()
+        ventana.title("LISTA DE TRABAJADORES")
+        ventana.configure(padx=5)
+        ventana.configure(bg="light blue")
+        
+        # Crear los campos de entrada para los datos del alumno
+        Label(ventana, text="Id:",bg="light blue" ).grid(row=0, column=0, padx=40, pady=15)
+        entrada_id = Entry(ventana)
+        entrada_id.grid(row=0, column=1, padx=40, pady=15)
+        entrada_id.configure(bg="Pink")
 
-Label(ventana, text="Nombre:").grid(row=1, column=0, padx=5, pady=5)
-entrada_nombre = Entry(ventana)
-entrada_nombre.grid(row=1, column=1, padx=5, pady=5)
-entrada_nombre.configure(bg="Pink")
+        Label(ventana, text="Nombre:",bg="light blue" ).grid(row=1, column=0, padx=40, pady=15)
+        entrada_nombre = Entry(ventana)
+        entrada_nombre.grid(row=1, column=1, padx=40, pady=15)
+        entrada_nombre.configure(bg="Pink")
 
-Label(ventana, text="Edad:").grid(row=2, column=0, padx=5, pady=5)
-entrada_edad = Entry(ventana)
-entrada_edad.grid(row=2, column=1, padx=5, pady=5)
-entrada_edad.configure(bg="Pink")
+        Label(ventana, text="Edad:",bg="light blue" ).grid(row=2, column=0, padx=40, pady=15)
+        entrada_edad = Entry(ventana)
+        entrada_edad.grid(row=2, column=1, padx=40, pady=15)
+        entrada_edad.configure(bg="Pink")
 
-Label(ventana, text="Correo:").grid(row=3, column=0, padx=5, pady=5)
-entrada_correo = Entry(ventana)
-entrada_correo.grid(row=3, column=1, padx=5, pady=5)
-entrada_correo.configure(bg="Pink")
+        Label(ventana, text="Correo:",bg="light blue" ).grid(row=3, column=0, padx=40, pady=15)
+        entrada_correo = Entry(ventana)
+        entrada_correo.grid(row=3, column=1, padx=40, pady=15)
+        entrada_correo.configure(bg="Pink")
 
-Label(ventana, text="Folio:").grid(row=4, column=0, padx=5, pady=5)
-entrada_folio = Entry(ventana)
-entrada_folio.grid(row=4, column=1, padx=5, pady=5)
-entrada_folio.configure(bg="Pink")
+        Label(ventana, text="Folio:",bg="light blue").grid(row=4, column=0, padx=40, pady=15)
+        entrada_folio = Entry(ventana)
+        entrada_folio.grid(row=4, column=1, padx=40, pady=15)
+        entrada_folio.configure(bg="Pink")
 
-Label(ventana, text="Oficio:").grid(row=5, column=0, padx=5, pady=5)
-entrada_oficio = Entry(ventana)
-entrada_oficio.grid(row=5, column=1, padx=5, pady=5)
-entrada_oficio.configure(bg="Pink")
-
-
-# Crear los botones para agregar, actualizar y eliminar alumnos
-Button(ventana, text="Agregar trabajador", command=agregar_trabajador, bg="coral").grid(row=0, column=2, padx=5, pady=5)
-Button(ventana, text="Actualizar trabajador", command=actualizar_trabajador, bg="coral").grid(row=1, column=2, padx=5, pady=5)
-Button(ventana, text="Eliminar trabajador", command=eliminar_trabajador, bg="coral").grid(row=2, column=2, padx=5, pady=5)
-
-# Crear la tabla para mostrar los alumnos
-tabla_trabajador = Frame(ventana)
-tabla_trabajador.grid(row=6, column=0, columnspan=3, padx=5, pady=5)
+        Label(ventana, text="Oficio:",bg="light blue" ).grid(row=5, column=0, padx=40, pady=15)
+        entrada_oficio = Entry(ventana)
+        entrada_oficio.grid(row=5, column=1, padx=40, pady=15)
+        entrada_oficio.configure(bg="Pink")
 
 
-Label(tabla_trabajador, text="ID").grid(row=0, column=0)
-Label(tabla_trabajador, text="Nombre").grid(row=0, column=1)
-Label(tabla_trabajador, text="Edad").grid(row=0, column=2)
-Label(tabla_trabajador, text="Correo").grid(row=0, column=3)
-Label(tabla_trabajador, text="Folio").grid(row=0, column=4)
-Label(tabla_trabajador, text="Oficio").grid(row=0, column=5)
+        # Crear los botones para agregar, actualizar y eliminar alumnos
+        Button(ventana, text="Agregar trabajador", command=agregar_trabajador, bg="coral").grid(row=0, column=2, padx=40, pady=15)
+        Button(ventana, text="Actualizar trabajador", command=actualizar_trabajador, bg="coral").grid(row=1, column=2, padx=40, pady=15)
+        Button(ventana, text="Eliminar trabajador", command=eliminar_trabajador, bg="coral").grid(row=2, column=2, padx=40, pady=15)
 
-# Mostrar la lista de alumnos en la tabla
-mostrar_trabajador()
+        # Crear la tabla para mostrar los alumnos
+        tabla_trabajador = Frame(ventana)
+        tabla_trabajador.grid(row=6, column=0, columnspan=3, padx=40, pady=15)
 
-# Iniciar el loop de la ventana
+
+        Label(tabla_trabajador, text="ID").grid(row=0, column=0)
+        Label(tabla_trabajador, text="Nombre").grid(row=0, column=1)
+        Label(tabla_trabajador, text="Edad").grid(row=0, column=2)
+        Label(tabla_trabajador, text="Correo").grid(row=0, column=3)
+        Label(tabla_trabajador, text="Folio").grid(row=0, column=4)
+        Label(tabla_trabajador, text="Oficio").grid(row=0, column=5)
+
+        # Mostrar la lista de alumnos en la tabla
+        mostrar_trabajador()
+
+        # Iniciar el loop de la ventana
+        ventana.mainloop()
+
+
+    else:
+        resultado.config(text="Nombre de usuario o contraseña incorrectos")
+
+#Define el tamaño y el color de la ventana 
+ventana = tk.Tk()
+ventana.title("INICIA SESION_ADMINISTRADOR")
+ventana.configure(padx=210)
+ventana.configure(bg="deepskyblue")
+
+# Crear campos de entrada para el nombre de usuario y la contraseña
+nombre_usuario = tk.Entry(ventana,bg="lavender")
+nombre_usuario.pack(pady=30)
+contrasena_usuario = tk.Entry(ventana, show="#",bg="lavender")
+contrasena_usuario.pack()
+
+# Crear botones para iniciar sesión y salir
+iniciar_sesion = tk.Button(ventana, text="INICIAR", command=iniciar_sesion, bg="light blue")
+iniciar_sesion.pack(padx=50, pady=20)
+Exit = tk.Button(ventana, text="SALIR", command=ventana.quit, bg="light blue")
+Exit.pack()
+
+# Crear un widget de etiqueta para mostrar el resultado del inicio de sesión
+resultado = tk.Label(ventana, text="", bg="deepskyblue")
+resultado.pack(pady=20)
 ventana.mainloop()
