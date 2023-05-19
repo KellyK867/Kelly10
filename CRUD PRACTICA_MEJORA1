@@ -3,6 +3,7 @@ from tkinter import messagebox
 import mysql.connector
 from tkinter import colorchooser as colorchooser 
 import tkinter as tk
+import re
 
 # Conectar a la base de datos
 try:
@@ -20,6 +21,10 @@ except mysql.connector.Error as e:
 # Crear la tabla de trabajadores si no existe
 cursor = db.cursor()
 cursor.execute("CREATE TABLE IF NOT EXISTS trabajador (id INT AUTO_INCREMENT PRIMARY KEY, nombre VARCHAR(255), edad INT, correo VARCHAR(255), folio INT(11), oficio VARCHAR(255))")
+def validar_correo(correo):
+
+    patron = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    return re.match(patron, correo)
 
 # Función para leer  los trabajadores de la base de datos
 def leer_trabajadorDB():
@@ -79,12 +84,31 @@ def mostrar_trabajador():
 
 # Función para agregar un nuevo alumno
 def agregar_trabajador():
+
     # Obtener los datos del nuevo alumno
-    nombre = entrada_nombre.get()
-    edad = entrada_edad.get()
-    correo = entrada_correo.get()
-    folio = entrada_folio.get()
-    oficio = entrada_oficio.get()
+    try:
+        correo = entrada_correo.get().lower()
+        if validar_correo(correo):
+            pass
+        else:
+            messagebox.showerror(message="El correo electronico no es valido")
+            return
+        
+        edad = int(entrada_edad.get())
+        if edad>=0 and edad<=99:
+            pass
+        else:
+            messagebox.showerror(message="Ingresa una edad menor de o igual a '99'")
+            return
+        folio = int(entrada_folio.get())
+
+        nombre = entrada_nombre.get()
+        oficio = entrada_oficio.get()
+        if not nombre.isalpha() or not oficio.isalpha():
+            messagebox.showerror(message="La entrada nombre u oficio contiene carcteres no validos")
+            return
+    except:
+        messagebox.showerror(title="datos erroneos",message="datos erroneos")
 
     # Validar que los campos no estén vacíos
     if not nombre or not edad or not correo or not folio or not oficio:
@@ -107,12 +131,32 @@ def agregar_trabajador():
 # Función para actualizar un alumno existente
 def actualizar_trabajador():
     # Obtener los datos del alumno a actualizar
-    nombre = entrada_nombre.get()
-    edad = entrada_edad.get()
-    correo = entrada_correo.get()
-    folio = entrada_folio.get()
-    oficio = entrada_oficio.get()
-    id = entrada_id.get()
+    try:
+        nombre = entrada_nombre.get()
+        oficio = entrada_oficio.get()
+        if nombre.isalpha() or oficio.isalpha():
+            pass
+        else:
+            messagebox.showerror(message="La entrada nombre u oficio contiene carcteres no validos")
+            return
+        edad = int(entrada_edad.get())        
+        if edad>=0 and edad<=99:
+            pass
+        else:
+            messagebox.showerror(message="Ingresa una edad menor de o igual a '99'")
+            return
+        correo = entrada_correo.get().lower()
+        if validar_correo(correo):
+            pass
+        else:
+            messagebox.showerror(message="El correo electronico no es valido")
+            return
+
+        folio = int(entrada_folio.get())
+
+        id = int(entrada_id.get())
+    except:
+        messagebox.showerror(title="datos erroneos",message="datos erroneos")
     
     # Validar que los campos no estén vacíos
     if not id or not nombre or not edad or not correo or not folio or not oficio:
