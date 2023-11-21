@@ -1,0 +1,57 @@
+class Arbol:
+    def __init__(self, carga=None, izq=None, der=None):
+        self.carga = carga
+        self.izquierda = izq
+        self.derecha = der
+
+    def __str__(self):
+        return str(self.carga)
+
+def principal():
+    bucle = True
+    raiz = Arbol("gato")
+    while bucle:
+        print("Piensa en un animal")
+        if not si("Estás pensando en un animal? "):
+            break
+        arbol = raiz
+        while arbol.izquierda is not None:
+            if si(arbol.carga + "? "):
+                arbol = arbol.izquierda
+            else:
+                arbol = arbol.derecha
+        animal = arbol.carga
+        if si("¿Es un " + animal + "? "):
+            print("He adivinado, soy el mejor")
+            continue
+        nuevo = input("¿Qué animal era? ")
+        info = input("¿Qué característica diferencia un " + animal + " de un " + nuevo + "? ")
+        indicador = "Si el animal fuera un " + animal + " ¿cuál sería la respuesta? "
+        arbol.carga = info
+        if si(indicador):
+            arbol.izquierda = Arbol(animal)
+            arbol.derecha = Arbol(nuevo)
+        else:
+            arbol.derecha = Arbol(animal)
+            arbol.izquierda = Arbol(nuevo)
+    recorrer(input('¿Desea recorrer el árbol? '), raiz)
+    return 0
+
+def si(preg):
+    resp = input(preg)
+    return resp[0].lower() == 's'
+
+def recorrer(resp, raiz):
+    if resp[0].lower() == 's':
+        inorder(raiz)
+
+def inorder(raiz):
+    if raiz is None:
+        return None
+    else:
+        inorder(raiz.izquierda)
+        print(raiz)
+        inorder(raiz.derecha)
+
+if __name__ == '__main__':
+    principal()
